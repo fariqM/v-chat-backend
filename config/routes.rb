@@ -5,9 +5,9 @@ Rails.application.routes.draw do
   # root "articles#index"
   namespace :api do
     namespace :v1 do
-      # resources :messages
-      get 'all-messages', to: 'messages#index'
-      resource :users
+      resources :messages
+      post 'register', to: 'users#register' 
+      post 'login', to: 'users#login' 
     end
   end
 end
