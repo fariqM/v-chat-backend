@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_23_142611) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_24_235940) do
+  create_table "api_tokens", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.text "token", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_api_tokens_on_user_id"
+  end
+
   create_table "messages", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "text", null: false
@@ -19,11 +27,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_23_142611) do
   end
 
   create_table "users", force: :cascade do |t|
+    t.string "email", null: false
     t.string "username", null: false
-    t.string "password", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "api_tokens", "users"
   add_foreign_key "messages", "users"
 end

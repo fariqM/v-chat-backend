@@ -1,4 +1,7 @@
 class User < ApplicationRecord
-    validates :username, :password, :password_confirmation, presence: true
-    validates :password, confirmation: true
+    validates :email, uniqueness: true, presence: true
+    validates :username, presence: true
+    validates :token, presence: true
+
+    has_many :api_tokens
 end
