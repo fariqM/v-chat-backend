@@ -1,6 +1,6 @@
 class Api::V1::MessagesController < ApplicationController
   def index
-    messages = Message.order(created_at: :desc)
+    messages = Message.joins(:user).select('messages.*, users.username as username')
     render json: {
       'success': true,
       'messages': messages
@@ -10,6 +10,7 @@ class Api::V1::MessagesController < ApplicationController
   def create
     email = params['email']
     token = params['token']
+    img_url = params['photo']
 
     begin
       decodeToken = JWT.decode(token, nil, false) # will throw an error if jwt invalid
@@ -26,7 +27,8 @@ class Api::V1::MessagesController < ApplicationController
           else
             render json: {
               'success': true,
-              'msg': 'Message has been sent'
+              'msg': 'Message has been sent',
+              'callback': newMessage
             }, status: 201
           end
         else
@@ -52,6 +54,6 @@ class Api::V1::MessagesController < ApplicationController
   private
 
   def message_params
-    params.permit(:text, :user)
+    params.permit(:text, :photo, :user)
   end
 end

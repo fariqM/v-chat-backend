@@ -18,15 +18,14 @@ class Api::V1::TokenController < ApplicationController
               'success': true,
               'msg': 'Token created!',
               'email': user['email'], 
-              'username': user['username'], 
+              'username': user['username'],
+              'user_id': user['id']
             }, status: 201
           end
         else
           render json: {
             'success': false,
-            'msg': 'Invalid tokens!',
-            'param': params['email'],
-            'data': decodeToken[0]['email']
+            'msg': 'Invalid tokens!'
           }, status: 403
         end
       rescue StandardError
