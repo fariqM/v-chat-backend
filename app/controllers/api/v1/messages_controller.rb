@@ -10,7 +10,13 @@ class Api::V1::MessagesController < ApplicationController
   def create
     email = params['email']
     token = params['token']
-    img_url = params['photo']
+    # img_url = params['photo']
+
+    # setup pusher
+    Pusher.app_id = '1675826'
+    Pusher.key = '30108b7620bbf32d2852'
+    Pusher.secret = '1673537dae0e63a45d6c'
+    Pusher.cluster = 'ap1'
 
     begin
       decodeToken = JWT.decode(token, nil, false) # will throw an error if jwt invalid
@@ -25,6 +31,7 @@ class Api::V1::MessagesController < ApplicationController
               'msg': 'Invalid payload'
             }, status: 403
           else
+            Pusher.trigger('v-chat', 'chat-message', { message: newMessage, username: user['username'] })
             render json: {
               'success': true,
               'msg': 'Message has been sent',
@@ -43,7 +50,7 @@ class Api::V1::MessagesController < ApplicationController
           'msg': 'Bad credential ! (2)'
         }, status: 403
       end
-    rescue => e
+    rescue StandardError
       render json: {
         'success': false,
         'msg': 'Invalid token!'
