@@ -6,7 +6,8 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :messages
-      post 'register', to: 'users#register' 
+      post 'register', to: 'users#register'
+      post 'register-token', to: 'token#register'
       post 'login', to: 'users#login' 
     end
   end
